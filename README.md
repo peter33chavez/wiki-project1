@@ -1,0 +1,1 @@
+this project will implement my version of wikipedia that uses Django and html to create. 
