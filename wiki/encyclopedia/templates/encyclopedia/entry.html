@@ -1,16 +1,12 @@
 {% extends "encyclopedia/layout.html" %}
 
 {% block title %}
-    {{entry}}
+    {{title}}
 {% endblock %}
 
 {% block body %}
-    <h1>{{ entry }}</h1>
-
-    <ul>
-        {% for entry in entries %}
-            <li>{{ entry }}</li>
-        {% endfor %}
-    </ul>
-
+    <h1>{{ title }}</h1>
+    <div class="wiki-data">
+        <p>{{ entry|safe }} </p>
+    </div>
 {% endblock %}
