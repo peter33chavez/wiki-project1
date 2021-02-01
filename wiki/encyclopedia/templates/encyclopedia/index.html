@@ -6,10 +6,10 @@
 
 {% block body %}
     <h1>All Pages</h1>
-
+    {% comment %} allow each li from the entries list to be an a tag for its given page. {% endcomment %}
     <ul>
         {% for entry in entries %}
-            <li>{{ entry }}</li>
+            <li><a href="wiki/{{entry}}">{{ entry }}</a></li>
         {% endfor %}
     </ul>
 

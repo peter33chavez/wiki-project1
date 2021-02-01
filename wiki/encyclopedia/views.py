@@ -9,14 +9,14 @@ def index(request):
     })
 
 def entry(request, title):
-    #check if the title after "wiki/" is a valid entry.
+    #check if the title string is a valid wiki entry.
     entry = util.get_entry(title)
     if entry is not None:
-    # render entry template with given info from the requested entry.
         return render(request, "encyclopedia/entry.html", {
             "entry": entry,
             "title": title
         })
-# else statement if page doesn't exist     
+    # render error if no wiki page exists    
     else:
         return render(request, "encyclopedia/pageError.html")
+

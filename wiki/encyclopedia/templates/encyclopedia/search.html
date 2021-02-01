@@ -1,0 +1,23 @@
+{% extends "encyclopedia/layout.html" %}
+
+{% block title %}
+    Search Results
+{% endblock %}
+
+{% block body %}
+    <h1>Search Results for:<i class="fa fa-italic" aria-hidden="true">{{ title }}</i></h1>
+    <div class="search-results">
+        {%if entry is not None %}
+            <div>{{ entry|safe }} </div>
+        {%elif substring is True %}
+            <ul>
+                {% for result in results %}
+                    <li><a href="wiki/{{result}}">{{ result }}</a></li>
+                {% endfor %}
+            </ul>
+        {%else%}    
+            <h2>No Results Found</h2> 
+            <p>It looks like we don't have what you're looking for</p>
+        {%endif%}
+    </div>
+{% endblock %}
