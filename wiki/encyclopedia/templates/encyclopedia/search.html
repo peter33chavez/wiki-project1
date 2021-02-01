@@ -9,7 +9,7 @@
     <div class="search-results">
         {%if entry is not None %}
             <div>{{ entry|safe }} </div>
-        {%elif substring is True %}
+        {%elif substring == True %}
             <ul>
                 {% for result in results %}
                     <li><a href="wiki/{{result}}">{{ result }}</a></li>
