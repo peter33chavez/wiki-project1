@@ -38,11 +38,10 @@ def search(request):
     else: 
         results = []
         for title in util.list_entries():
-            if searchItem in title:
+            if searchItem.upper() in title.upper():
                 results.append(title)
         if results:
             substring = True  
-
         #return values from search
         return render(request, "encyclopedia/search.html", {
             "searchItem": searchItem,

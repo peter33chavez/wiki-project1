@@ -7,7 +7,7 @@
 {% block body %}
     <div class="search-results">
         {%if substring == True %}
-            <h4>Search Results for:{{ searchItem }}</h4>
+            <h4>Search Results for:<i>{{ searchItem }}</i></h4>
             <ul>
                 {% for result in results %}
                     <li><a href="wiki/{{result}}">{{ result }}</a></li>
@@ -15,7 +15,8 @@
             </ul>
         {%else%}    
             <h2>No Results Found</h2> 
-            <p>It looks like we don't have what you're looking for</p>
+            <p>It looks like we don't have what you're looking for.</p>
+            <button class="create-page" href="{% url 'newPage'%}">Create Page</button>
         {%endif%}
     </div>
 {% endblock %}
