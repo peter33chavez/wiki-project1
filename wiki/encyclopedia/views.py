@@ -1,5 +1,7 @@
 from django.shortcuts import render
 from django import forms
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 
 from . import util
 
@@ -22,29 +24,30 @@ def entry(request, title):
         return render(request, "encyclopedia/pageError.html")
 
 def search(request):
-    if request.method == "POST":
-    # entry- what the user types into the search form
-        if request.POST.get("q"):
-            substring = False
-        # get for data 
-            searchItem = request.POST.get["q"]
-            entry = util.get_entry(searchItem)
-            # if searchItem isn't an exact match check for substring matches
-            if entry is None:
-                results = []
-                for title in util.list_entries():
-                    if title.find(searchItem) == -1:
-                        continue
-                    else:
-                        results.append(title)
-                if results:
-                    substring = True  
 
-            #return values from search
-            return render(request, "encyclopedia/search.html", {
-                "entry": entry,
-                "substring": substring,
-                "results": results
-            })
+    substring = False
+    # get form data 
+    searchItem = request.GET.get("q")
+    entry = util.get_entry(searchItem)
+    # if searchItem isn't an exact match check for substring matches
+    if entry is not None:
+        return render(request, "encyclopedia/entry.html", {
+            "entry": entry,
+            "title": searchItem
+        })
+    else: 
+        results = []
+        for title in util.list_entries():
+            if searchItem in title:
+                results.append(title)
+        if results:
+            substring = True  
+
+        #return values from search
+        return render(request, "encyclopedia/search.html", {
+            "searchItem": searchItem,
+            "substring": substring,
+            "results": results
+        })
 
 

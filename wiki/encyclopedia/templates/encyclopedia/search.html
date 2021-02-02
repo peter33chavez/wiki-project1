@@ -5,11 +5,9 @@
 {% endblock %}
 
 {% block body %}
-    <h1>Search Results for:<i class="fa fa-italic" aria-hidden="true">{{ title }}</i></h1>
     <div class="search-results">
-        {%if entry is not None %}
-            <div>{{ entry|safe }} </div>
-        {%elif substring == True %}
+        {%if substring == True %}
+            <h4>Search Results for:{{ searchItem }}</h4>
             <ul>
                 {% for result in results %}
                     <li><a href="wiki/{{result}}">{{ result }}</a></li>
