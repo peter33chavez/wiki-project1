@@ -11,5 +11,7 @@
     {{ form }}
     <button type="submit" class='savebtn'>Save</button>
 </form>
+{% if {{ form }} %}
+    <p>Page already exists</p>
 
 {%endblock%}

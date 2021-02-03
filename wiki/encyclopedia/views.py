@@ -8,7 +8,7 @@ from . import util
 
 class newWikiPageForm(forms.Form):
     newFormTitle = forms.CharField(label="Title")
-    newFormBody = forms.CharField(label="Description")
+    newFormBody = forms.CharField(widget=forms.Textarea, label="Description")
 
 
 
@@ -56,8 +56,26 @@ def search(request):
         })
 
 def newPage(request):
-    #when create new page button is clicked user is taken to create 
+    #when the save btn is pressed run post check
+    if request.method == "POST":
+        form = newWikiPageForm(request.POST)
+        if form.is_valid():
+            # add new wiki page if page doesn't already exist
+            if not form.cleaned_data["newFormTitle"] in util.list_entries():
+                title = form.cleaned_data["newFormTitle"]
+                content = form.cleaned_data["newFormBody"]
+                util.save_entry(title, content)
+        else:
+            return render(request, "encyclopedia/newPage.html", {
+                "form": form
+            })    
+            
 
-    return render(request, "encyclopedia/search.html", {
-        "form": newWikiPageForm()
-    })
+
+        
+    
+    #when 'create new page' button is clicked user is taken to newPage.html
+    else:  
+        return render(request, "encyclopedia/newPage.html", {
+            "form": newWikiPageForm()
+        })
