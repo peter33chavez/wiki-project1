@@ -72,11 +72,6 @@ def newPage(request):
             return render(request, "encyclopedia/newPage.html", {
                 "form": form
             })    
-            
-
-
-        
-    
     #when 'create new page' button is clicked user is taken to newPage.html
     else:  
         return render(request, "encyclopedia/newPage.html", {
