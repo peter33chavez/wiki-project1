@@ -65,6 +65,9 @@ def newPage(request):
                 title = form.cleaned_data["newFormTitle"]
                 content = form.cleaned_data["newFormBody"]
                 util.save_entry(title, content)
+                return HttpResponseRedirect(reverse("entry"), {
+                    "title": title
+                })
         else:
             return render(request, "encyclopedia/newPage.html", {
                 "form": form
