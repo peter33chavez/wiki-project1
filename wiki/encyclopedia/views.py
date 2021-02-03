@@ -2,8 +2,14 @@ from django.shortcuts import render
 from django import forms
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from django import forms
 
 from . import util
+
+class newWikiPageForm(forms.Form):
+    newFormTitle = forms.CharField(label="Title")
+    newFormBody = forms.CharField(label="Description")
+
 
 
 def index(request):
@@ -49,4 +55,9 @@ def search(request):
             "results": results
         })
 
+def newPage(request):
+    #when create new page button is clicked user is taken to create 
 
+    return render(request, "encyclopedia/search.html", {
+        "form": newWikiPageForm()
+    })

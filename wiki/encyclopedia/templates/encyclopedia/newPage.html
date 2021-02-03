@@ -1,0 +1,15 @@
+{% extends "encyclopedia/layout.html" %}
+
+{%block title%}
+    New Page
+{%endblock%}
+
+{%block body%}
+{% comment %} bring up a markdown textarea for users to type in their wiki entry.  {% endcomment %}
+<form action="{% url 'newPage' %}" method="post">
+    {% csrf_token %}
+    {{ form }}
+    <button type="submit" class='savebtn'>Save</button>
+</form>
+
+{%endblock%}
