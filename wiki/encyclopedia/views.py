@@ -10,8 +10,6 @@ class newWikiPageForm(forms.Form):
     newFormTitle = forms.CharField(label="Title")
     newFormBody = forms.CharField(widget=forms.Textarea, label="Description")
 
-
-
 def index(request):
     return render(request, "encyclopedia/index.html", {
         "entries": util.list_entries()
@@ -31,23 +29,21 @@ def entry(request, title):
 
 def search(request):
 
-    substring = False
     # get form data 
     searchItem = request.GET.get("q")
-    entry = util.get_entry(searchItem)
     # if searchItem isn't an exact match check for substring matches
-    if entry is not None:
-        return render(request, "encyclopedia/entry.html", {
-            "entry": entry,
-            "title": searchItem
-        })
+    if (util.get_entry(searchItem) is not None):
+        return HttpResponseRedirect(reverse("entry", kwargs={
+                    "title": searchItem
+        }))
     else: 
         results = []
+        substring = False
         for title in util.list_entries():
             if searchItem.upper() in title.upper():
                 results.append(title)
         if results:
-            substring = True  
+            substring = True
         #return values from search
         return render(request, "encyclopedia/search.html", {
             "searchItem": searchItem,
@@ -59,21 +55,29 @@ def newPage(request):
     #when the save btn is pressed run post check
     if request.method == "POST":
         form = newWikiPageForm(request.POST)
+
         if form.is_valid():
+            title = form.cleaned_data["newFormTitle"]
+            content = form.cleaned_data["newFormBody"]
+
             # add new wiki page if page doesn't already exist
-            if not form.cleaned_data["newFormTitle"] in util.list_entries():
-                title = form.cleaned_data["newFormTitle"]
-                content = form.cleaned_data["newFormBody"]
+            if util.get_entry(title) is None:
+
                 util.save_entry(title, content)
-                return HttpResponseRedirect(reverse("entry"), {
+
+                # take user to their newly created page
+                return HttpResponseRedirect(reverse("entry", kwargs={
                     "title": title
-                })
-        else:
-            return render(request, "encyclopedia/newPage.html", {
-                "form": form
-            })    
+                }))
+            else:
+                return render(request, "encyclopedia/newPage.html", {
+                    "form": form,
+                    "exists": True,
+                    "title": title
+                })    
     #when 'create new page' button is clicked user is taken to newPage.html
     else:  
         return render(request, "encyclopedia/newPage.html", {
-            "form": newWikiPageForm()
+            "form": newWikiPageForm(),
+            "exists": False
         })
