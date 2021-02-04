@@ -28,28 +28,28 @@ def entry(request, title):
         return render(request, "encyclopedia/pageError.html")
 
 def search(request):
-
-    # get form data 
-    searchItem = request.GET.get("q")
-    # if searchItem isn't an exact match check for substring matches
-    if (util.get_entry(searchItem) is not None):
-        return HttpResponseRedirect(reverse("entry", kwargs={
-                    "title": searchItem
-        }))
-    else: 
-        results = []
-        substring = False
-        for title in util.list_entries():
-            if searchItem.upper() in title.upper():
-                results.append(title)
-        if results:
-            substring = True
-        #return values from search
-        return render(request, "encyclopedia/search.html", {
-            "searchItem": searchItem,
-            "substring": substring,
-            "results": results
-        })
+    
+        # get form data 
+        searchItem = request.GET.get("q")
+        # if searchItem isn't an exact match check for substring matches
+        if (util.get_entry(searchItem) is not None):
+            return HttpResponseRedirect(reverse("entry", kwargs={
+                        "title": searchItem
+            }))
+        else: 
+            results = []
+            substring = False
+            for title in util.list_entries():
+                if searchItem.upper() in title.upper():
+                    results.append(title)
+            if results:
+                substring = True
+            #return values from search
+            return render(request, "encyclopedia/search.html", {
+                "searchItem": searchItem,
+                "substring": substring,
+                "results": results
+            })
 
 def newPage(request):
     #when the save btn is pressed run post check
@@ -74,7 +74,12 @@ def newPage(request):
                     "form": form,
                     "exists": True,
                     "title": title
-                })    
+                }) 
+        else:  
+            return render(request, "encyclopedia/newPage.html", {
+                "form": form,
+                "exists": False
+            })           
     #when 'create new page' button is clicked user is taken to newPage.html
     else:  
         return render(request, "encyclopedia/newPage.html", {
