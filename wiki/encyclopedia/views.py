@@ -10,6 +10,10 @@ class newWikiPageForm(forms.Form):
     newFormTitle = forms.CharField(label="Title")
     newFormBody = forms.CharField(widget=forms.Textarea, label="Description")
 
+class editPageForm(forms.Form):
+    editTitle = forms.CharField(label="Title")
+    editBody = forms.CharField(widget=forms.Textarea, label="Description")
+
 def index(request):
     return render(request, "encyclopedia/index.html", {
         "entries": util.list_entries()
@@ -28,7 +32,7 @@ def entry(request, title):
         return render(request, "encyclopedia/pageError.html")
 
 def search(request):
-    
+
         # get form data 
         searchItem = request.GET.get("q")
         # if searchItem isn't an exact match check for substring matches
@@ -86,3 +90,9 @@ def newPage(request):
             "form": newWikiPageForm(),
             "exists": False
         })
+
+def editPage(request):
+    return render(request, "encyclopedia/editPage.html", {
+        "form": editPageForm()
+    })
+    
