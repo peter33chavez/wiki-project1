@@ -5,7 +5,9 @@
 {% endblock %}
 
 {% block body %}
-<a class="editBtn" href"{% url editPage %}">Edit</a>
+
+    <a class="editBtn" href="{{ title }}/edit" roll= "button">Edit</a>
+
     <h1>{{ title }}</h1>
     <div class="wiki-data">
         <p>{{ entry|safe }} </p>

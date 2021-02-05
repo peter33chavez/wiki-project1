@@ -12,7 +12,7 @@ class newWikiPageForm(forms.Form):
 
 class editPageForm(forms.Form):
     editTitle = forms.CharField(label="Title")
-    editBody = forms.CharField(widget=forms.Textarea, label="Description")
+    editBody = forms.CharField(widget=forms.Textarea, label="Description")  
 
 def index(request):
     return render(request, "encyclopedia/index.html", {
@@ -91,8 +91,28 @@ def newPage(request):
             "exists": False
         })
 
-def editPage(request):
-    return render(request, "encyclopedia/editPage.html", {
-        "form": editPageForm()
-    })
+def editPage(request, title):
+
+    if request.method == "POST":
+        form = form(request.POST)
+
+        if form.is_valid():
+            title = form.cleaned_data["editTitle"]
+            content = form.cleaned_data["editBody"]
+
+            util.save_entry(title, content)
+
+            # take user to their editted page
+            return HttpResponseRedirect(reverse("entry", kwargs={
+                "title": title
+            }))
+    else:
+        form = editPageForm()
+        entry = util.get_entry(title)
+        form.fields["editTitle"].initial = title
+        form.fields["editBody"].initial = entry
+        return render(request, "encyclopedia/editPage.html", {
+            "form": form,
+            "title": form.fields["editTitle"].initial
+        })
     
