@@ -93,6 +93,7 @@ def newPage(request):
 
 def editPage(request, title):
 
+    entry = util.get_entry(title)
     if request.method == "POST":
         form = form(request.POST)
 
@@ -107,12 +108,12 @@ def editPage(request, title):
                 "title": title
             }))
     else:
-        form = editPageForm()
-        entry = util.get_entry(title)
-        form.fields["editTitle"].initial = title
-        form.fields["editBody"].initial = entry
+        form = editPageForm(initial={
+            'editTitle': title,
+            'editBody': entry
+        })
         return render(request, "encyclopedia/editPage.html", {
             "form": form,
-            "title": form.fields["editTitle"].initial
+            "title": title
         })
     
