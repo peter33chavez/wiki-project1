@@ -3,6 +3,7 @@ from django import forms
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django import forms
+import random
 
 from . import util
 
@@ -130,7 +131,7 @@ def editPage(request, title):
 
     entry = util.get_entry(title)
     if request.method == "POST":
-        
+        # check if the data is valid then save/replace old data
         form = form(request.POST)
         if form.is_valid():
             title = form.cleaned_data["editTitle"]
@@ -142,6 +143,7 @@ def editPage(request, title):
             return HttpResponseRedirect(reverse("entry", kwargs={
                 "title": title
             }))
+    # give user a editting form with existing data filled in by defult.        
     else:
         form = editPageForm(initial={
             'editTitle': title,
@@ -152,5 +154,14 @@ def editPage(request, title):
             "title": title
         })
 
+def randomPage(request):
+    """
+    Generate a random entry from wiki list 
+    """
+    entries = util.list_entries()
+    
+    return HttpResponseRedirect(reverse("entry", kwargs={
+                "title": random.choice(entries)
+            }))
 
     
