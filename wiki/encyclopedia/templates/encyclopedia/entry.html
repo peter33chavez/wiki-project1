@@ -6,10 +6,9 @@
 
 {% block body %}
 
-    <a class="editBtn" href="{{ title }}/edit" roll= "button">Edit</a>
+    <a class="btn btn-outline-secondary" href="{{ title }}/edit" roll= "button">Edit</a>
 
-    <h1>{{ title }}</h1>
-    <div class="wiki-data">
-        <p>{{ entry|safe }} </p>
-    </div>
+    
+    <p>{{ entry | safe }} </p>
+    
 {% endblock %}

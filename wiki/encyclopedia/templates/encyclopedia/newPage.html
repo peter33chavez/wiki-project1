@@ -8,11 +8,14 @@
 {% comment %} bring up a markdown textarea for users to type in their wiki entry.  {% endcomment %}
 {% if exists is True%}
     <p class="alert alert-danger" role="alert">Page already exists</p>
-    <p class="alert alert-primary" role="alert">Vist that page here: <a href="wiki/{{ title }}">{{ title }}</a></p>
+    <p class="alert alert-primary" role="alert">Vist that page here: <a href="wiki/{{ formTitle }}">{{ formTitle }}</a></p>
 {%endif%}
 <form action="{% url 'newPage' %}" method="post">
     {% csrf_token %}
-    {{ form }}
-    <button type="submit" class='saveBtn'>Save</button>
+    <h4>Title</h4>
+    {{ formTitle }}
+    <h4>Body</h4>
+    {{ formBody }}
+    <button type="submit" class="btn btn-dark">Save</button>
 </form>
 {%endblock%}

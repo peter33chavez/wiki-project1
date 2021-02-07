@@ -4,16 +4,18 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django import forms
 import random
+import markdown2
+from markdown2 import Markdown
 
 from . import util
 
 class newWikiPageForm(forms.Form):
-    newFormTitle = forms.CharField(label="Title")
-    newFormBody = forms.CharField(widget=forms.Textarea, label="Description")
+    newFormTitle = forms.CharField()
+    newFormBody = forms.CharField(widget=forms.Textarea)
 
 class editPageForm(forms.Form):
-    editTitle = forms.CharField(label="Title")
-    editBody = forms.CharField(widget=forms.Textarea, label="Description")  
+    editTitle = forms.CharField()
+    editBody = forms.CharField(widget=forms.Textarea)  
 
 def index(request):
     """ Returns list of all existing Wiki Pages """
@@ -32,9 +34,10 @@ def entry(request, title):
     """
     # check if the title string is a valid wiki entry.
     entry = util.get_entry(title)
+    md = Markdown()
     if entry is not None:
         return render(request, "encyclopedia/entry.html", {
-            "entry": entry,
+            "entry": md.convert(entry),
             "title": title
         })
     # render error if no wiki page exists    
@@ -83,7 +86,9 @@ def newPage(request):
     3. Check if entry doesn't already exist
     4. Save entry and redirect user to the new Wiki Page
     """
-
+    newForm = newWikiPageForm()
+    newFormTitle = newForm["newFormTitle"]
+    newFormBody = newForm["newFormBody"]
     #when the save btn is pressed run post check
     if request.method == "POST":
         form = newWikiPageForm(request.POST)
@@ -104,20 +109,22 @@ def newPage(request):
             # render template again with the inputted data along with a error message    
             else:
                 return render(request, "encyclopedia/newPage.html", {
-                    "form": form,
-                    "exists": True,
-                    "title": title
+                    "formTitle": title,
+                    "formBody": content,
+                    "exists": True
                 }) 
         # render template again with error message       
         else:  
             return render(request, "encyclopedia/newPage.html", {
-                "form": form,
+                "formTitle": title,
+                "formBody": content,
                 "exists": False
             })           
     #when 'create new page' button is clicked user is taken to newPage.html
     else:  
         return render(request, "encyclopedia/newPage.html", {
-            "form": newWikiPageForm(),
+            "formTitle": newFormTitle,
+            "formBody": newFormBody,
             "exists": False
         })
 
@@ -128,11 +135,10 @@ def editPage(request, title):
     1. Render a prefilled form with the already existing data from the Wiki page 
     2. After save check that all fields are filled then replace data and redirect to editted page 
     """
-
     entry = util.get_entry(title)
     if request.method == "POST":
         # check if the data is valid then save/replace old data
-        form = form(request.POST)
+        form = editPageForm(request.POST)
         if form.is_valid():
             title = form.cleaned_data["editTitle"]
             content = form.cleaned_data["editBody"]
@@ -145,13 +151,15 @@ def editPage(request, title):
             }))
     # give user a editting form with existing data filled in by defult.        
     else:
-        form = editPageForm(initial={
-            'editTitle': title,
-            'editBody': entry
+        editForm = editPageForm(initial={
+            "editTitle": title,
+            "editBody": entry
         })
+        editFormTitle = editForm["editTitle"]
+        editFormBody = editForm["editBody"]
         return render(request, "encyclopedia/editPage.html", {
-            "form": form,
-            "title": title
+            "formTitle": editFormTitle,
+            "formBody": editFormBody
         })
 
 def randomPage(request):
@@ -163,10 +171,6 @@ def randomPage(request):
                 "title": random.choice(entries)
             }))
 
-def markdown():
-    """
-    Convert the entry pages into a Markdown language.
-    """    
-    
+
 
     

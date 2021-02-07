@@ -5,9 +5,12 @@ Edit Page
 {%endblock%}
 
 {%block body%}
-<form action="{% url 'editPage' title %}" method="post">
+<form action="{% url 'editPage' formTitle %}" method="post">
     {% csrf_token %}
-    {{ form }}
-    <button type="submit" class='saveBtn'>Save</button>
+    <h4>Title</h4>
+    {{ formTitle }}
+    <h4>Body</h4>
+    {{ formBody }}
+    <button type="submit" class="btn btn-dark">Save</button>
 </form>
 {%endblock%}
