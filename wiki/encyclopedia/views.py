@@ -89,7 +89,6 @@ def newPage(request):
     newForm = newWikiPageForm()
     newFormTitle = newForm["newFormTitle"]
     newFormBody = newForm["newFormBody"]
-    #when the save btn is pressed run post check
     if request.method == "POST":
         form = newWikiPageForm(request.POST)
         # check that all fields are filled
