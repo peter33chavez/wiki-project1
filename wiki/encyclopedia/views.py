@@ -159,9 +159,14 @@ def randomPage(request):
     Generate a random entry from wiki list 
     """
     entries = util.list_entries()
-    
     return HttpResponseRedirect(reverse("entry", kwargs={
                 "title": random.choice(entries)
             }))
+
+def markdown():
+    """
+    Convert the entry pages into a Markdown language.
+    """    
+    
 
     
